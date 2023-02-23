@@ -253,6 +253,7 @@ GLOBAL_PROTECT(admin_verbs_debug)
 	/client/proc/reload_interactions,	/*SKYRAT EDIT ADDITION*/
 	/client/proc/test_area_spawner,		/*AUTOMAPPER - SKYRAT EDIT ADDITION*/
 	/client/proc/toggle_liquid_debug,	/*SKYRAT EDIT ADDITION*/
+	/client/proc/show_winset_debug_values,
 	)
 GLOBAL_LIST_INIT(admin_verbs_possess, list(/proc/possess, GLOBAL_PROC_REF(release)))
 GLOBAL_PROTECT(admin_verbs_possess)
@@ -265,6 +266,7 @@ GLOBAL_LIST_INIT(admin_verbs_permissions, list(
 GLOBAL_PROTECT(admin_verbs_permissions)
 GLOBAL_LIST_INIT(admin_verbs_poll, list(/client/proc/poll_panel))
 GLOBAL_PROTECT(admin_verbs_poll)
+
 
 /client/proc/add_admin_verbs()
 	if(holder)
@@ -985,6 +987,18 @@ GLOBAL_PROTECT(admin_verbs_poll)
 		CHECK_TICK
 
 	to_chat(admin, "[number_made] crewmembers have been created.")
+
+/client/proc/show_winset_debug_values()
+	set name = "Show Client View Debug Values"
+	set category = "Debug"
+	set desc = "Shows your viewport's values for debugging purposes."
+	var/divisor = text2num(winget(src, "mapwindow.map", "icon-size")) || world.icon_size
+	var/winsize_string = winget(src, "mapwindow.map", "size")
+
+	to_chat(usr, "Current client view: [view]")
+	to_chat(usr, "Icon size: [divisor]")
+	to_chat(usr, "xDim: [round(text2num(winsize_string) / divisor)]")
+	to_chat(usr, "yDim: [round(text2num(copytext(winsize_string,findtext(winsize_string,"x")+1,0)) / divisor)]")
 
 /// Debug verb for seeing at a glance what all spells have as set requirements
 /client/proc/debug_spell_requirements()
